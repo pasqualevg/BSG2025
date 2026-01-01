@@ -39,7 +39,6 @@
       border: 2px solid #ddd;
       border-radius: 10px;
       margin-bottom: 15px;
-      box-sizing: border-box;
     }
     button {
       width: 100%;
@@ -90,7 +89,6 @@
 <body>
   <img src="immagine.jpg" alt="Festeggiamenti" loading="lazy">
 
-  <!-- Sezione form per chi non ha ancora inviato -->
   <div id="formSection" class="form-section">
     <form id="nameForm">
       <input type="text" id="name" name="name" placeholder="Inserisci il tuo nome" required maxlength="50">
@@ -98,7 +96,6 @@
     </form>
   </div>
 
-  <!-- Sezione PLAY per chi ha già inviato -->
   <div id="playSection" class="play-section">
     <div id="message"></div>
     <button id="playBtn">Riascolta gli auguri! 🔊</button>
@@ -117,7 +114,6 @@
     const submitBtn = document.getElementById('submitBtn');
     const playBtn = document.getElementById('playBtn');
 
-    // Se ha già inviato da questo dispositivo → mostra direttamente sezione PLAY
     if (localStorage.getItem(STORAGE_KEY)) {
       showPlaySection('Grazie! Hai già festeggiato con noi! 🎊');
     } else {
@@ -134,24 +130,16 @@
       submitBtn.disabled = true;
       submitBtn.textContent = 'Inviato! 🎉';
 
-      // Segna il dispositivo come "già inviato"
-      localStorage.setItem(STORAGE_KEY, 'true'); // persiste su quel browser/dispositivo [web:149]
+      localStorage.setItem(STORAGE_KEY, 'true'); // blocca doppi invii [web:149]
 
-      // Audio + messaggio
       try {
         audio.currentTime = 0;
-        await audio.play(); // avvia l'audio [web:4]
+        await audio.play(); // riproduce audio [web:4]
       } catch (e) {
         console.log('Audio non avviato automaticamente:', e);
       }
 
-      msg.textContent = `Grazie ${name}, torna a festeggiare!!!! 🎊`;
-
-      // Salva sul backend
-      const payload = {
-        name,
-        timestamp: new Date().toISOString()
-      };
+      const payload = { name, timestamp: new Date().toISOString() };
 
       try {
         await fetch('/log', {
@@ -169,7 +157,7 @@
     playBtn.addEventListener('click', async () => {
       try {
         audio.currentTime = 0;
-        await audio.play(); // replay audio [web:4]
+        await audio.play();
       } catch (e) {
         console.log('Audio non avviato:', e);
       }
