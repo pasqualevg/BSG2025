@@ -32,7 +32,7 @@ app.post('/log', (req, res) => {
   fs.writeFileSync(LOG_FILE, JSON.stringify(logs, null, 2));
   
   res.json({ ok: true });
-}); [web:83][web:88]
+}); 
 
 // GET /admin → pagina log nomi
 app.get('/admin', (req, res) => {
@@ -70,3 +70,4 @@ app.listen(PORT, () => {
   console.log(`📱 Sito: http://localhost:${PORT}`);
   console.log(`📊 Admin: http://localhost:${PORT}/admin`);
 });
+
