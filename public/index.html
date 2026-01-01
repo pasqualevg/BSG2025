@@ -6,17 +6,17 @@
   <title>Buon Anno!</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      text-align: center;
-    }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: rgb(10, 103, 58); /* verde uniforme */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+}
     img {
       max-width: 90vw;
       max-height: 40vh;
@@ -98,7 +98,7 @@
 
   <div id="playSection" class="play-section">
     <div id="message"></div>
-    <button id="playBtn">Riascolta gli auguri! 🔊</button>
+    <button id="playBtn">Bastardo Balla! 🔊</button>
   </div>
 
   <audio id="audio" src="auguri.mp3" preload="auto"></audio>
@@ -115,7 +115,7 @@
     const playBtn = document.getElementById('playBtn');
 
     if (localStorage.getItem(STORAGE_KEY)) {
-      showPlaySection('Grazie! Hai già festeggiato con noi! 🎊');
+      showPlaySection('Grazie Campione! Sei già in lista! 🎊');
     } else {
       formSection.style.display = 'block';
     }
@@ -175,3 +175,4 @@
   </script>
 </body>
 </html>
+
