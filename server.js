@@ -34,7 +34,7 @@ app.post('/log', (req, res) => {
 });
 
 // Pagina admin
-app.get('/admin', (req, res) => {
+app.get('/listavincitori', (req, res) => {
   let logs = [];
   try {
     if (fs.existsSync(LOG_FILE)) {
@@ -75,3 +75,4 @@ app.get('/admin', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server attivo sulla porta ${PORT}`);
 });
+
