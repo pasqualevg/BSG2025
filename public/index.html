@@ -5,40 +5,92 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buon Anno!</title>
   <style>
-    /* Stesse regole CSS del precedente */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: system-ui, -apple-system, sans-serif;
       background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
       min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 20px; text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
     }
-    img { max-width: 90vw; max-height: 40vh; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-    form { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); margin: 20px 0; width: 100%; max-width: 400px; }
+    img {
+      max-width: 90vw;
+      max-height: 40vh;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    form {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      margin: 20px 0;
+      width: 100%;
+      max-width: 400px;
+    }
     input[type="text"] {
-      width: 100%; padding: 15px; font-size: 18px; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 15px;
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
     }
     button {
-      width: 100%; padding: 15px; background: #ff6b6b; color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold;
-      cursor: pointer; transition: all 0.3s;
+      width: 100%;
+      padding: 15px;
+      background: #ff6b6b;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
     }
-    button:hover:not(:disabled) { background: #ff5252; transform: scale(1.02); }
-    button:disabled { background: #ccc; cursor: not-allowed; }
-    #message { 
-      color: white; font-size: 20px; font-weight: bold; margin-top: 20px; 
-      background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px;
+    button:hover:not(:disabled) {
+      background: #ff5252;
+      transform: scale(1.02);
     }
-    #playBtn { background: #4ecdc4 !important; }
-    #playBtn:hover { background: #45b7aa !important; }
-    .form-section, .play-section { display: none; }
-    @media (min-width: 768px) { img { max-height: 300px; } form { max-width: 500px; padding: 40px; } }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+    #message {
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+      background: rgba(255,255,255,0.2);
+      padding: 15px;
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+    }
+    #playBtn {
+      background: #4ecdc4 !important;
+    }
+    #playBtn:hover {
+      background: #45b7aa !important;
+    }
+    .form-section, .play-section {
+      display: none;
+    }
+    @media (min-width: 768px) {
+      img { max-height: 300px; }
+      form { max-width: 500px; padding: 40px; }
+    }
   </style>
 </head>
 <body>
   <img src="immagine.jpg" alt="Festeggiamenti" loading="lazy">
 
-  <!-- Form per chi non ha ancora inviato -->
+  <!-- Sezione form per chi non ha ancora inviato -->
   <div id="formSection" class="form-section">
     <form id="nameForm">
       <input type="text" id="name" name="name" placeholder="Inserisci il tuo nome" required maxlength="50">
@@ -46,7 +98,7 @@
     </form>
   </div>
 
-  <!-- Sezione con bottone PLAY per chi ha già inviato -->
+  <!-- Sezione PLAY per chi ha già inviato -->
   <div id="playSection" class="play-section">
     <div id="message"></div>
     <button id="playBtn">Riascolta gli auguri! 🔊</button>
@@ -56,6 +108,7 @@
 
   <script>
     const STORAGE_KEY = 'nomeInviato_2025';
+
     const formSection = document.getElementById('formSection');
     const playSection = document.getElementById('playSection');
     const form = document.getElementById('nameForm');
@@ -64,50 +117,72 @@
     const submitBtn = document.getElementById('submitBtn');
     const playBtn = document.getElementById('playBtn');
 
-    // Controllo se già inviato
+    // Se ha già inviato da questo dispositivo → mostra direttamente sezione PLAY
     if (localStorage.getItem(STORAGE_KEY)) {
-      showPlaySection();
-      return;
+      showPlaySection('Grazie! Hai già festeggiato con noi! 🎊');
+    } else {
+      formSection.style.display = 'block';
     }
-
-    // Mostra form iniziale
-    formSection.style.display = 'block';
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name = document.getElementById('name').value.trim();
+
+      const nameInput = document.getElementById('name');
+      const name = nameInput.value.trim();
       if (!name) return;
 
-      // Blocco submit
       submitBtn.disabled = true;
       submitBtn.textContent = 'Inviato! 🎉';
-      localStorage.setItem(STORAGE_KEY, 'true');
 
-      // Audio + messaggio + passa a PLAY
-      audio.play().catch(e => console.log('Audio bloccato'));
-      msg.textContent = `Grazie ${name}, torna a festeggiare!!!! 🎊`;
-      
-      // Invia al backend
-      const payload = { name, timestamp: new Date().toISOString() };
+      // Segna il dispositivo come "già inviato"
+      localStorage.setItem(STORAGE_KEY, 'true'); // persiste su quel browser/dispositivo [web:149]
+
+      // Audio + messaggio
       try {
-        await fetch('/log', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-      } catch (err) { console.error('Backend:', err); }
+        audio.currentTime = 0;
+        await audio.play(); // avvia l'audio [web:4]
+      } catch (e) {
+        console.log('Audio non avviato automaticamente:', e);
+      }
 
-      showPlaySection();
+      msg.textContent = `Grazie ${name}, torna a festeggiare!!!! 🎊`;
+
+      // Salva sul backend
+      const payload = {
+        name,
+        timestamp: new Date().toISOString()
+      };
+
+      try {
+        await fetch('/log', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.error('Errore invio al backend:', err);
+      }
+
+      showPlaySection(`Grazie ${name}, torna a festeggiare!!!! 🎊`);
     });
 
-    // Bottone PLAY per riascoltare
-    playBtn.addEventListener('click', () => {
-      audio.currentTime = 0; // Riavvolge
-      audio.play().catch(e => console.log('Audio bloccato'));
+    playBtn.addEventListener('click', async () => {
+      try {
+        audio.currentTime = 0;
+        await audio.play(); // replay audio [web:4]
+      } catch (e) {
+        console.log('Audio non avviato:', e);
+      }
       playBtn.textContent = 'Riascoltando... 🔊';
-      setTimeout(() => playBtn.textContent = 'Riascolta gli auguri! 🔊', 3000);
+      setTimeout(() => {
+        playBtn.textContent = 'Riascolta gli auguri! 🔊';
+      }, 3000);
     });
 
-    function showPlaySection() {
+    function showPlaySection(messageText) {
       formSection.style.display = 'none';
       playSection.style.display = 'block';
-      msg.textContent = 'Grazie! Hai già festeggiato con noi! 🎊';
+      msg.textContent = messageText;
     }
   </script>
 </body>
