@@ -28,5 +28,18 @@ app.get('/admin', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM logs ORDER BY timestamp DESC');
     const logs = result.rows;
-    let html = `<!DOCTYPE html><html><head><title>Log</title><style>body{font-family:sans-serif;max-width:800px;margin:50px auto;padding:20px;background:#f5f5f5;}h1
+    let html = `
+<!DOCTYPE html>
+<html><head><title>Log Capodanno</title>
+<style>body{font-family:sans-serif;max-width:800px;margin:50px auto;padding:20px;background:#f5f5f5;}
+h1{color:#ff6b6b;}ul{list-style:none;}li{padding:10px;background:white;margin:5px 0;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}</style>
+</head><body><h1>📊 Log Nomi</h1><p><a href="/">← Home</a></p>
+<ul>${logs.map(l => `<li>${l.name} <small>${new Date(l.timestamp).toLocaleString('it-IT')}</small></li>`).join('')}</ul>
+<p style="text-align:center;font-weight:bold;">Totale: ${logs.length} 🎉</p></body></html>`;
+    res.send(html);
+  } catch (e) {
+    res.status(500).send('Errore DB');
+  }
+});
 
+app.listen(PORT, () => console.log(`Server su ${PORT}`));
